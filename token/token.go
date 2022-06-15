@@ -34,3 +34,17 @@ const (
 	FUNCTION = "FUNCTION"
 	LET      = "LET"
 )
+
+// language keywords map
+var keywords = map[string]TokenType{
+	"fn":  FUNCTION,
+	"let": LET,
+}
+
+// LookupIdent able to tell user-defined identifiers apart from language keywords.
+func LookupIdent(ident string) TokenType {
+	if tok, ok := keywords[ident]; ok {
+		return tok
+	}
+	return IDENT
+}
