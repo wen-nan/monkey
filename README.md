@@ -3,7 +3,10 @@ Learn `writing an interpreter in go` and `writing a compiler in go`.
 Implement a monkey programming language.
 
 ## Features
-* Monkeys is a REPL(Read Eval Print Loop) programming language, e.g. Python.
+* Monkey is a REPL(Read Eval Print Loop) programming language, e.g. Python.
+* The parser we write is a recursive descent parser.
+> There are two main strategies when parsing a programming language: top-down parsing or bottom-up parsing.
+> “Recursive descent parsing” is a variant of top-down parsing.
 
 ## Related concepts
 * **lexical analysis, lexing or tokenization:** is the process of converting a sequence of characters into a sequence of lexical tokens.
