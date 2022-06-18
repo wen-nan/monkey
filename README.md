@@ -7,7 +7,9 @@ Implement a monkey programming language.
 * The parser we write is a recursive descent parser.
 > There are two main strategies when parsing a programming language: top-down parsing or bottom-up parsing.
 > “Recursive descent parsing” is a variant of top-down parsing.
-* Use Pratt parsing to parsing expressions.
+* Use Pratt parser to parsing expressions.
+> A Pratt parser’s main idea is the association of parsing functions 
+> (which Pratt calls “semantic code”) with token types.
 
 ## Terminology
 * **lexical analysis, lexing or tokenization:** is the process of converting a sequence of characters into a sequence of lexical tokens.

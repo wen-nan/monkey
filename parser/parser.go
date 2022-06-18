@@ -7,6 +7,14 @@ import (
 	"monkey/token"
 )
 
+// Define two types of functions: a prefix parsing functions and an infix parsing function.
+// Whenever this token type is encountered, the parsing functions are called
+// to parse the appropriate expression and return an AST node that represents it.
+type (
+	prefixParseFn func() ast.Expression
+	infixParseFn  func(ast.Expression) ast.Expression
+)
+
 // Parser has three fields:
 // l is a pointers to an instance of the lexer, for call NextToken()
 // curToken and peekToken point to the current and the next token.
@@ -17,6 +25,11 @@ type Parser struct {
 	peekToken token.Token
 
 	errors []string
+
+	// we can check if the appropriate map (infix or prefix)
+	// has a parsing function associated with curToken.Type.
+	prefixParseFns map[token.TokenType]prefixParseFn
+	infixParseFns  map[token.TokenType]infixParseFn
 }
 
 func New(l *lexer.Lexer) *Parser {
@@ -127,4 +140,13 @@ func (p *Parser) expectPeek(t token.TokenType) bool {
 func (p *Parser) peekError(t token.TokenType) {
 	msg := fmt.Sprintf("expected next token to be %s, got %s instead", t, p.peekToken.Type)
 	p.errors = append(p.errors, msg)
+}
+
+// add entries to these maps
+func (p *Parser) registerPrefix(tokenType token.TokenType, fn prefixParseFn) {
+	p.prefixParseFns[tokenType] = fn
+}
+
+func (p *Parser) registerInfix(tokenType token.TokenType, fn infixParseFn) {
+	p.infixParseFns[tokenType] = fn
 }
