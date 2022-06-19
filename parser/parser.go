@@ -77,6 +77,8 @@ func New(l *lexer.Lexer) *Parser {
 	// method as prefixParseFn
 	p.registerPrefix(token.BANG, p.parsePrefixExpression)
 	p.registerPrefix(token.MINUS, p.parsePrefixExpression)
+	p.registerPrefix(token.TRUE, p.parseBoolean)
+	p.registerPrefix(token.FALSE, p.parseBoolean)
 
 	// register one infix parse function for all of our infix operators
 	p.infixParseFns = make(map[token.TokenType]infixParseFn)
@@ -196,6 +198,9 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 
 	// it does all this again and again until it encounters
 	// a token that has a higher precedence or a token.SEMICOLON.
+	// Note: The call to p.peekTokenIs(token.SEMICOLON) is not strictly necessary,
+	// because our peekPrecedence method returns LOWEST as the default value
+	// if no precedence for p.peekToken.Type can be found.
 	for !p.peekTokenIs(token.SEMICOLON) && precedence < p.peekPrecedence() {
 		// try to find infixParseFns for the next token.
 		infix := p.infixParseFns[p.peekToken.Type]
@@ -213,6 +218,10 @@ func (p *Parser) parseExpression(precedence int) ast.Expression {
 
 func (p *Parser) parseIdentifier() ast.Expression {
 	return &ast.Identifier{Token: p.curToken, Value: p.curToken.Literal}
+}
+
+func (p *Parser) parseBoolean() ast.Expression {
+	return &ast.Boolean{Token: p.curToken, Value: p.curTokenIs(token.TRUE)}
 }
 
 func (p *Parser) parseIntegerLiteral() ast.Expression {
