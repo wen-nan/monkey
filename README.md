@@ -10,6 +10,7 @@ Implement a monkey programming language.
 * Use Pratt parser to parsing expressions.
 > A Pratt parser’s main idea is the association of parsing functions 
 > (which Pratt calls “semantic code”) with token types.
+* We will build a tree-walking interpreter and evaluate on the fly.
 
 ## Terminology
 * **lexical analysis, lexing or tokenization:** is the process of converting a sequence of characters into a sequence of lexical tokens.
