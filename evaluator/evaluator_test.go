@@ -112,6 +112,35 @@ func TestIfElseExpression(t *testing.T) {
 	}
 }
 
+func TestReturnStatements(t *testing.T) {
+	tests := []struct {
+		input    string
+		expected int64
+	}{
+		{"return 10;", 10},
+		{"return 10; 9;", 10},
+		{"return 2 * 5; 9;", 10},
+		{"9; return 2 * 5; 9;", 10},
+		// if we have nested block statements (which is totally legit in a Monkey program!)
+		// we can’t unwrap the value of object.ReturnValue on first sight,
+		// because we need to further keep track of it,
+		// so we can stop the execution in the outermost block statement.
+		{`
+if (10 > 1) {
+	if (10 > 1) {
+		return 10;
+	}
+	return 1;
+}
+`, 10},
+	}
+
+	for _, tt := range tests {
+		evaluated := testEval(tt.input)
+		testIntegerObject(t, evaluated, tt.expected)
+	}
+}
+
 // helper function
 func testEval(input string) object.Object {
 	l := lexer.New(input)
