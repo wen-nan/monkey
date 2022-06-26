@@ -11,6 +11,8 @@ Implement a monkey programming language.
 > A Pratt parser’s main idea is the association of parsing functions 
 > (which Pratt calls “semantic code”) with token types.
 * We will build a tree-walking interpreter and evaluate on the fly.
+* We will be represented every value as an object, an interface of our design.
+  Every value will be wrapped inside a struct, which fulfills this Object interface.
 
 ## Terminology
 * **lexical analysis, lexing or tokenization:** is the process of converting a sequence of characters into a sequence of lexical tokens.
