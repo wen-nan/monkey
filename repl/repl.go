@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"io"
 	"monkey/evaluator"
+	"monkey/object"
 	"monkey/parser"
 
 	"monkey/lexer"
@@ -30,6 +31,7 @@ const MONKEY_FACE = `            __,__
 // the tokens the lexer gives us until we encounter EOF.
 func Start(in io.Reader, out io.Writer) {
 	scanner := bufio.NewScanner(in)
+	env := object.NewEnvironment()
 
 	// loop
 	for {
@@ -50,7 +52,7 @@ func Start(in io.Reader, out io.Writer) {
 		}
 
 		// evaluate
-		evaluated := evaluator.Eval(program)
+		evaluated := evaluator.Eval(program, env)
 		if evaluated != nil {
 			io.WriteString(out, evaluated.Inspect())
 			io.WriteString(out, "\n")
