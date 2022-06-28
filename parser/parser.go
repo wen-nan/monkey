@@ -75,6 +75,8 @@ func New(l *lexer.Lexer) *Parser {
 	p.registerPrefix(token.IDENT, p.parseIdentifier)
 	// register parsing function for token.INT
 	p.registerPrefix(token.INT, p.parseIntegerLiteral)
+	// register parsing function for token.STRING
+	p.registerPrefix(token.STRING, p.parseStringLiteral)
 	// for token.BANG and token.MINUS we register the same
 	// method as prefixParseFn
 	p.registerPrefix(token.BANG, p.parsePrefixExpression)
@@ -395,6 +397,10 @@ func (p *Parser) parseCallArguments() []ast.Expression {
 		return nil
 	}
 	return args
+}
+
+func (p *Parser) parseStringLiteral() ast.Expression {
+	return &ast.StringLiteral{Token: p.curToken, Value: p.curToken.Literal}
 }
 
 // The following are helper function.

@@ -164,6 +164,7 @@ if (10 > 1) {
 		// tests to make sure that we get an error
 		// when we try to evaluate an unbound identifier.
 		{"foobar", "identifier not found: foobar"},
+		{`"Hello" - "world"`, "unknown operator: STRING - STRING"},
 	}
 
 	for _, tt := range tests {
@@ -244,6 +245,32 @@ let addTwo = newAddr(2);
 addTwo(2);
 `
 	testIntegerObject(t, testEval(input), 4)
+}
+
+func TestStringLiteral(t *testing.T) {
+	input := `"hello world!";`
+
+	evaluated := testEval(input)
+	str, ok := evaluated.(*object.String)
+	if !ok {
+		t.Fatalf("object is not Tring. got=%T(%+v)", evaluated, evaluated)
+	}
+	if str.Value != "hello world!" {
+		t.Errorf("string has wrong value. got=%q", str.Value)
+	}
+}
+
+func TestStringConcatenation(t *testing.T) {
+	input := `"Hello" + " " + "world!"`
+
+	evaluated := testEval(input)
+	str, ok := evaluated.(*object.String)
+	if !ok {
+		t.Fatalf("object is not Tring. got=%T(%+v)", evaluated, evaluated)
+	}
+	if str.Value != "Hello world!" {
+		t.Errorf("string has wrong value. got=%q", str.Value)
+	}
 }
 
 // helper function

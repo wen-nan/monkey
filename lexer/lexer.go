@@ -46,6 +46,20 @@ func (l *Lexer) readNumber() string {
 	return l.input[position:l.position]
 }
 
+// calls readChar until it encounters either a closing double quote
+// or the end of the input.
+func (l *Lexer) readString() string {
+	position := l.position + 1
+	for {
+		l.readChar()
+		if l.ch == '"' || l.ch == 0 {
+			break
+		}
+	}
+
+	return l.input[position:l.position]
+}
+
 // only to “peek” ahead in the input and not move around in it.
 func (l *Lexer) peekChar() byte {
 	if l.readPosition >= len(l.input) {
@@ -70,6 +84,9 @@ func (l *Lexer) NextToken() token.Token {
 		} else {
 			tok = newToken(token.ASSIGN, l.ch)
 		}
+	case '"':
+		tok.Type = token.STRING
+		tok.Literal = l.readString()
 	case ';':
 		tok = newToken(token.SEMICOLON, l.ch)
 	case '(':
