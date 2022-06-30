@@ -342,3 +342,31 @@ func (ie *IndexExpression) String() string {
 
 	return out.String()
 }
+
+// HashLiteral Allow any expression as a key and
+// any expression as a value in a hash literal.
+// {<expression> : <expression>, <expression> : <expression>, ... }
+// Validate hash key types in the evaluation stage
+// and generate possible errors there.
+type HashLiteral struct {
+	Token token.Token // the '{' token
+	Pairs map[Expression]Expression
+}
+
+func (hl *HashLiteral) expressionNode()      {}
+func (hl *HashLiteral) TokenLiteral() string { return hl.Token.Literal }
+
+func (hl *HashLiteral) String() string {
+	var (
+		out   bytes.Buffer
+		pairs []string
+	)
+
+	for key, value := range hl.Pairs {
+		pairs = append(pairs, key.String()+":"+value.String())
+	}
+	out.WriteString("{")
+	out.WriteString(strings.Join(pairs, ", "))
+	out.WriteString("}")
+	return out.String()
+}
