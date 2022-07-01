@@ -1,6 +1,10 @@
 package evaluator
 
-import "monkey/object"
+import (
+	"fmt"
+
+	"monkey/object"
+)
 
 // keep a separate environment of built-in functions
 var builtins = map[string]*object.Builtin{
@@ -90,6 +94,15 @@ var builtins = map[string]*object.Builtin{
 			copy(newElements, arr.Elements)
 			newElements[length] = args[1]
 			return &object.Array{Elements: newElements}
+		},
+	},
+	// puts print the given arguments on new lines to STDOUT.
+	"puts": &object.Builtin{
+		Fn: func(args ...object.Object) object.Object {
+			for _, arg := range args {
+				fmt.Println(arg.Inspect())
+			}
+			return NULL
 		},
 	},
 }
