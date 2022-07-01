@@ -97,6 +97,8 @@ var builtins = map[string]*object.Builtin{
 		},
 	},
 	// puts print the given arguments on new lines to STDOUT.
+	// puts function is an expression and not producing a value,
+	// so we need to make sure that it returns NULL.
 	"puts": &object.Builtin{
 		Fn: func(args ...object.Object) object.Object {
 			for _, arg := range args {
