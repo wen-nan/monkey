@@ -44,14 +44,18 @@ func Make(op Opcode, operands ...int) []byte {
 		return []byte{}
 	}
 
+	// find out how long the resulting instruction is going to be.
 	instructionLen := 1
 	for _, w := range def.OperandWidths {
 		instructionLen += w
 	}
 
+	// the Opcode as its first byte.
 	instruction := make([]byte, instructionLen)
 	instruction[0] = byte(op)
 
+	// we iterate over the defined OperandWidths,
+	// take the matching element from operands and put it in the instruction.
 	offset := 1
 	for i, o := range operands {
 		width := def.OperandWidths[i]
@@ -62,4 +66,8 @@ func Make(op Opcode, operands ...int) []byte {
 		offset += width
 	}
 	return instruction
+}
+
+func (ins *Instructions) String() string {
+	return ""
 }
