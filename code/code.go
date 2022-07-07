@@ -68,6 +68,34 @@ func Make(op Opcode, operands ...int) []byte {
 	return instruction
 }
 
+// nicely-formatted multi-line output.
+// There’s a counter at the start of each line,
+// telling us which bytes we’re looking at,
+// there are the opcodes in their human-readable form,
+// and then there are the decoded operands.
 func (ins *Instructions) String() string {
 	return ""
+}
+
+// ReadOperands should then return the decoded operands
+// and tell us how many bytes it read to do that.
+// ReadOperands is supposed to be Make’s counterpart.
+func ReadOperands(def *Definition, ins Instructions) ([]int, int) {
+	operands := make([]int, len(def.OperandWidths))
+	offset := 0
+
+	for i, width := range def.OperandWidths {
+		switch width {
+		case 2:
+			operands[i] = int(ReadUint16(ins[offset:]))
+		}
+
+		offset += width
+	}
+
+	return operands, offset
+}
+
+func ReadUint16(ins Instructions) uint16 {
+	return binary.BigEndian.Uint16(ins)
 }
